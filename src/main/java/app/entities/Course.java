@@ -1,6 +1,5 @@
 package app.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +24,8 @@ public class Course {
     private String teacherName;
 
     @Column(name = "semester")
-    private int semester;
+    private String semester;
 
     @Column(name = "classroom")
-    private int classroom;
+    private String classroom;
 }

@@ -7,13 +7,10 @@ import app.daos.StudentDAO;
 import app.entities.Course;
 import app.entities.Person;
 import app.entities.Student;
+import app.entities.StudentStatus;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
-
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Locale;
 
 public class Main {
     public static void main(String[] args) {
@@ -28,15 +25,45 @@ public class Main {
                 .phoneNumber("+45 34023388")
                 .email("sofus@kkkkkkkk.dk")
                 .address("Vejen")
-                .status(3)
+                .status(StudentStatus.ACTIVE)
                 .dayOfBirth(LocalDate.of(2014,8,9))
+                .courseId(1)
                 .build();
+
+        Student s2 = Student.builder()
+                .name("Mulle")
+                .phoneNumber("+45 34023388")
+                .email("mulle@kkkkkkkk.dk")
+                .address("Vejen")
+                .status(StudentStatus.INACTIVE)
+                .dayOfBirth(LocalDate.of(2010,3,9))
+                .build();
+
+        Student s3 = Student.builder()
+                .name("Lars")
+                .phoneNumber("+45 34023388")
+                .email("lars@kkkkkkkk.dk")
+                .address("gaden")
+                .status(StudentStatus.GRADUATED)
+                .dayOfBirth(LocalDate.of(1990,5,28))
+                .build();
+
+        Student s4 = Student.builder()
+                .name("Victor")
+                .phoneNumber("+45 34023388")
+                .email("sofus@kkkkkkkk.dk")
+                .address("Vejen")
+                .status(StudentStatus.ACTIVE)
+                .dayOfBirth(LocalDate.of(2014,8,9))
+                .courseId(1)
+                .build();
+
 
         Course c1 = Course.builder()
                 .name("Software")
                 .teacherName("Jon")
-                .semester(3)
-                .classroom(7)
+                .semester("3 semester")
+                .classroom("3. 7")
                 .build();
 
         // Svarer til en fabrik der kan lave en connectionPool
@@ -50,27 +77,35 @@ public class Main {
         // Dette er vores connectionPool (forbindelse)
         EntityManager em = emf.createEntityManager();
 
-
         personDAO.createPerson(p1);
         studentDAO.createStudent(s1);
+        studentDAO.createStudent(s2);
+        studentDAO.createStudent(s3);
+        studentDAO.createStudent(s4);
         courseDAO.createCourse(c1);
 
-        //Examples
-        // Read
-        /*
-        Unicorn foundUnicorn = unicornDAO.findById(createdUnicorn.getId());
-        System.out.println("Found Unicorn: " + foundUnicorn.getName());
-         */
+        Student foundStudent = studentDAO.findById(s1.getId());
+        System.out.println("Found Student: " + foundStudent.getName());
 
-        // Update
-        /*
-        foundUnicorn.setAge(6);
-        Unicorn updatedUnicorn = unicornDAO.update(foundUnicorn);
-        System.out.println("Updated Unicorn Age: " + updatedUnicorn.getAge());
-         */
+        foundStudent.setName("Filip");
+        Student updatedStudent = studentDAO.update(foundStudent);
+        System.out.println("Updated Student Name: " + updatedStudent.getName());
 
-        // Delete
-        //unicornDAO.delete(createdUnicorn.getId());
+        //studentDAO.delete(updatedStudent.getId());
+
+        System.out.println("All students");
+        studentDAO.findAll().forEach(System.out::println);
+
+        System.out.println();
+
+        System.out.println("All courses");
+        courseDAO.findAll().forEach(System.out::println);
+
+        System.out.println();
+
+        System.out.println("Studens for specific course id");
+        studentDAO.findAllStudentForSpecificCourse(1).forEach(System.out::println);
+
 
 
         em.close();

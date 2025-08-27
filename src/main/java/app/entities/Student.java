@@ -1,9 +1,7 @@
 package app.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
 
 @Getter
@@ -33,8 +31,12 @@ public class Student {
     private String address;
 
     @Column(name = "status")
-    private int status;
+    @Enumerated(EnumType.STRING)
+    private StudentStatus status;
 
     @Column(name = "day_of_birth")
     private LocalDate dayOfBirth;
+
+    @Column(name = "course_id")
+    private int courseId;
 }

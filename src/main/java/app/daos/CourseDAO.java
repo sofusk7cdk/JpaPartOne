@@ -5,6 +5,9 @@ import app.entities.Person;
 import app.entities.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
+
+import java.util.List;
 
 public class CourseDAO {
 
@@ -52,6 +55,13 @@ public class CourseDAO {
             }
             em.getTransaction().commit();
             em.close();
+        }
+    }
+
+    public List<Course> findAll() {
+        try(EntityManager em = emf.createEntityManager()) {
+            TypedQuery<Course> query = em.createQuery("SELECT name FROM Course name", Course.class);
+            return query.getResultList();
         }
     }
 }

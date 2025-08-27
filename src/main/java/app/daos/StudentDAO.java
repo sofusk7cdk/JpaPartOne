@@ -1,9 +1,11 @@
 package app.daos;
 
-import app.entities.Person;
 import app.entities.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
+
+import java.util.List;
 
 public class StudentDAO {
     private final EntityManagerFactory emf;
@@ -50,4 +52,21 @@ public class StudentDAO {
             em.close();
         }
     }
+
+    public List<Student> findAll() {
+        try(EntityManager em = emf.createEntityManager()) {
+            TypedQuery<Student> query = em.createQuery("SELECT name FROM Student name", Student.class);
+            return query.getResultList();
+        }
+    }
+
+    public List<Student> findAllStudentForSpecificCourse(int courseId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<Student> query = em.createQuery("SELECT s FROM Student s WHERE s.courseId = :courseId", Student.class);
+            query.setParameter("courseId", courseId);
+            return query.getResultList();
+        }
+    }
+
+
 }
